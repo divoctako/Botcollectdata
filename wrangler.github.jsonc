@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "line-chat-archive",
+  "name": "botcollectdata",
   "main": "release/worker.js",
   "compatibility_date": "2026-11-05",
   "compatibility_flags": ["global_fetch_strictly_public"],

@@ -12,7 +12,7 @@ Source code อยู่บน GitHub แล้ว คู่มือหลั�
 
 | ช่องใน Cloudflare Builds | ค่า |
 | --- | --- |
-| Worker name | line-chat-archive |
+| Worker name | botcollectdata |
 | Production branch | main |
 | Root directory | ราก repository |
 | Build command | npm run build:github |
@@ -117,7 +117,7 @@ npx wrangler whoami
 
 คำสั่งแรกจะเปิดเบราว์เซอร์เพื่อให้เข้าสู่ระบบและอนุญาต Wrangler คำสั่งที่สองใช้ตรวจบัญชี หากมีหลายบัญชีให้เลือกบัญชีเดียวกันทุกขั้นตอน สามารถกำหนด `account_id` ระดับบนสุดของ wrangler.jsonc ให้ตรงกับบัญชีนั้นได้
 
-ไม่ต้องสร้าง Worker เปล่าใน Dashboard ล่วงหน้า ชื่อ Worker ในโปรเจกต์คือ `line-chat-archive`
+ไม่ต้องสร้าง Worker เปล่าใน Dashboard ล่วงหน้า ชื่อ Worker ในโปรเจกต์คือ `botcollectdata`
 
 ### ขั้นที่ 3 — สร้างฐานข้อมูล D1 จริง
 
@@ -168,7 +168,7 @@ npm run deploy
 หากยังไม่ได้ตั้ง workers.dev subdomain ให้ตั้งตามหน้าจอหรือ Dashboard ที่ Workers & Pages เมื่อ deploy สำเร็จ terminal จะแสดง URL รูปแบบ:
 
 ```text
-https://line-chat-archive.your-subdomain.workers.dev
+https://botcollectdata.your-subdomain.workers.dev
 ```
 
 ใช้ URL ที่คำสั่งคืนมาจริง ไม่คัดลอก your-subdomain จากตัวอย่างไปใช้ หน้าเว็บรอบแรกจะแจ้งว่ายังไม่ได้ตั้งค่า Google/LINE เป็นอาการปกติในขั้นนี้ ยังไม่ต้องเชิญบอตเข้ากลุ่ม
@@ -179,7 +179,7 @@ https://line-chat-archive.your-subdomain.workers.dev
 
 ```jsonc
 "vars": {
-  "APP_URL": "https://line-chat-archive.your-subdomain.workers.dev",
+  "APP_URL": "https://botcollectdata.your-subdomain.workers.dev",
   "OWNER_EMAIL": "yourname@gmail.com",
   "ARCHIVE_NAMESPACE": "line-chat-archive-production",
   "RETENTION_DAYS": "365",
@@ -225,7 +225,7 @@ https://www.googleapis.com/auth/drive.file
 3. ใน **Authorized redirect URIs** เพิ่ม URL จริงของคุณต่อท้ายด้วย `/auth/callback`:
 
 ```text
-https://line-chat-archive.your-subdomain.workers.dev/auth/callback
+https://botcollectdata.your-subdomain.workers.dev/auth/callback
 ```
 
 4. หากต้องทดสอบ Worker ในเครื่องด้วย ให้เพิ่ม `http://localhost:8787/auth/callback` เป็นอีกหนึ่งรายการ หน้า demo พอร์ต 8788 ไม่ได้ใช้ OAuth จึงไม่ต้องเพิ่ม
@@ -304,7 +304,7 @@ npm run deploy
 ใน LINE Developers → Messaging API ตั้ง Webhook URL เป็น:
 
 ```text
-https://line-chat-archive.your-subdomain.workers.dev/webhooks/line
+https://botcollectdata.your-subdomain.workers.dev/webhooks/line
 ```
 
 กด Update → Verify ควรเห็น Success จากนั้นเปิด **Use webhook** และ **Webhook redelivery** เมื่อมีตัวเลือก แนะนำเริ่มจากกลุ่มทดสอบเพียงหนึ่งกลุ่ม
@@ -325,14 +325,14 @@ https://line-chat-archive.your-subdomain.workers.dev/webhooks/line
 
 ### ขั้นที่ 11 — ตรวจงานเบื้องหลังและการดูแล
 
-Cloudflare Dashboard → Workers & Pages → line-chat-archive → Settings → Triggers/Cron Triggers ควรมี `* * * * *` ตาม wrangler.jsonc ซึ่งเรียกทุกนาทีเพื่อส่งรายการที่ค้างและดูแลอายุข้อมูล ไม่มีรอบส่งข้อความเวลา 08:00 น. แล้ว
+Cloudflare Dashboard → Workers & Pages → botcollectdata → Settings → Triggers/Cron Triggers ควรมี `* * * * *` ตาม wrangler.jsonc ซึ่งเรียกทุกนาทีเพื่อส่งรายการที่ค้างและดูแลอายุข้อมูล ไม่มีรอบส่งข้อความเวลา 08:00 น. แล้ว
 
 Cron บางการเปลี่ยนแปลงอาจใช้เวลาทยอยมีผล ให้ตรวจตามเอกสาร Cloudflare และสถานะจริง อย่าตัดสินจากการ deploy เสร็จเพียงอย่างเดียว
 
 หากต้องดู runtime log ระหว่างทดสอบ:
 
 ```powershell
-npx wrangler tail line-chat-archive
+npx wrangler tail botcollectdata
 ```
 
 กด Ctrl+C เมื่อเลิกดู การปิด tail ไม่หยุด Worker ออนไลน์ ดูจำนวนรายการค้างและข้อผิดพลาดบน dashboard ควบคู่กัน

@@ -24,12 +24,12 @@ Repository: https://github.com/divoctako/Botcollectdata
 | --- | --- |
 | Repository | divoctako/Botcollectdata |
 | Production branch | main |
-| Worker name | line-chat-archive |
+| Worker name | botcollectdata |
 | ไฟล์ config สำหรับ GitHub Builds | wrangler.github.jsonc |
 | D1 binding | DB ตัวพิมพ์ใหญ่ |
 | ฐาน D1 ตัวอย่าง | line-chat-archive-dashboard |
 
-URL เว็บจะทราบหลัง deploy ครั้งแรก เช่น `https://line-chat-archive.your-subdomain.workers.dev` ให้แทน your-subdomain ด้วย URL ที่ Cloudflare แสดงจริง ไม่ใช้ localhost หรือ URL preview
+URL เว็บจะทราบหลัง deploy ครั้งแรก เช่น `https://botcollectdata.your-subdomain.workers.dev` ให้แทน your-subdomain ด้วย URL ที่ Cloudflare แสดงจริง ไม่ใช้ localhost หรือ URL preview
 
 ## 1. สร้าง D1 และใส่ ID ผ่าน GitHub
 
@@ -52,7 +52,7 @@ Database ID ไม่ใช่ access token ส่วนรหัส LINE/Google
 2. เลือก Import a repository / Connect Git และเลือก GitHub
 3. อนุญาต Cloudflare GitHub App ให้เข้าถึง repository `divoctako/Botcollectdata` ตามหน้าจอที่คุณตรวจและยอมรับเอง
 4. เลือก repository Botcollectdata และ branch `main`
-5. ตั้ง **Worker name** เป็น `line-chat-archive` ให้ตรง name ใน wrangler.github.jsonc
+5. ตั้ง **Worker name** เป็น `botcollectdata` ให้ตรง name ใน wrangler.github.jsonc
 6. ตั้ง Build settings ตามตารางนี้:
 
 | ช่อง | ค่า |
@@ -69,9 +69,9 @@ Database ID ไม่ใช่ access token ส่วนรหัส LINE/Google
 
 สำคัญ: ใช้ `deploy:github` ตามนี้ เพราะ script เลือก `wrangler.github.jsonc` และคง runtime variables ที่คุณตั้งใน Dashboard ถ้าใช้คำสั่ง deploy default จะอ่าน config สำหรับการพัฒนาอีกไฟล์ที่ยังมี placeholder
 
-กด Deploy แล้วรอ build สำเร็จ จะได้ URL รูปแบบ `https://line-chat-archive.<your-subdomain>.workers.dev` จด URL production จริงไว้ ไม่ใช้ URL preview
+กด Deploy แล้วรอ build สำเร็จ จะได้ URL รูปแบบ `https://botcollectdata.<your-subdomain>.workers.dev` จด URL production จริงไว้ ไม่ใช้ URL preview
 
-ถ้ามี Worker ชื่อ line-chat-archive อยู่แล้ว ให้เข้า Worker นั้น → Settings → Builds → Connect repository และตั้งค่า Build/Deploy command ข้างต้น แทนการสร้าง Worker ชนชื่อ
+ถ้ามี Worker ชื่อ botcollectdata อยู่แล้ว ให้เข้า Worker นั้น → Settings → Builds → Connect repository และตั้งค่า Build/Deploy command ข้างต้น แทนการสร้าง Worker ชนชื่อ
 
 ถ้าไม่เห็น repository ตอนเลือก ให้เปิดการตั้งค่า Cloudflare GitHub App แล้วให้สิทธิ์ repository นี้ตามหน้าจอ ไม่จำเป็นต้องอนุญาตทุก repository ในบัญชี
 
@@ -85,7 +85,7 @@ Database ID ไม่ใช่ access token ส่วนรหัส LINE/Google
 
 | ชื่อ | ค่า |
 | --- | --- |
-| APP_URL | URL production จริง ไม่มี / ท้าย เช่น https://line-chat-archive.your-subdomain.workers.dev |
+| APP_URL | URL production จริง ไม่มี / ท้าย เช่น https://botcollectdata.your-subdomain.workers.dev |
 | OWNER_EMAIL | อีเมล Google เจ้าของที่ใช้ล็อกอิน |
 | ARCHIVE_NAMESPACE | line-chat-archive-dashboard-production |
 | RETENTION_DAYS | 365 |
@@ -117,7 +117,7 @@ Database ID ไม่ใช่ access token ส่วนรหัส LINE/Google
 | https://www.googleapis.com/auth/drive.file |
 
 6. ไป Clients → Create client เลือก Web application และตั้งชื่อ เช่น LINE Archive Cloudflare
-7. เพิ่ม Authorized redirect URI เป็น URL production จริงต่อท้าย `/auth/callback` เช่น `https://line-chat-archive.your-subdomain.workers.dev/auth/callback`
+7. เพิ่ม Authorized redirect URI เป็น URL production จริงต่อท้าย `/auth/callback` เช่น `https://botcollectdata.your-subdomain.workers.dev/auth/callback`
 8. Create แล้วเก็บ Client ID และ Client secret ของ client นี้ไว้กรอกใน Cloudflare ไม่ใช้ API key หรือ service-account JSON แทน
 
 โค้ดนี้แลก token ฝั่ง server จึงไม่ต้องตั้ง Authorized JavaScript origins เพื่อให้ flow นี้ทำงาน การกรอก origins อย่างเดียวไม่แทน redirect URI ไม่ต้องเปิดชีตเป็นสาธารณะ และยังไม่ต้องสร้างไฟล์ชีตเอง
@@ -206,7 +206,7 @@ Cloudflare → Worker → Settings → Triggers ควรมี Cron `* * * * *`
 | ไม่เห็น repository | Cloudflare GitHub App ยังไม่ได้รับสิทธิ์ repo นี้ หรือเลือก GitHub account คนละบัญชี |
 | Build หา build:github ไม่พบ | Root directory ไม่ใช่ราก repo หรือ branch/commit ยังไม่ใช่ชุดล่าสุด |
 | database not found หรือ ID เป็นศูนย์ | แก้ ID ใน wrangler.github.jsonc ผ่าน GitHub แล้ว commit ก่อนกด Retry build |
-| Worker name ไม่ตรง config | ใช้ชื่อ line-chat-archive หรือแก้ name ใน config ให้ตรง Worker ที่ตั้งไว้ |
+| Worker name ไม่ตรง config | ใช้ชื่อ botcollectdata หรือแก้ name ใน config ให้ตรง Worker ที่ตั้งไว้ |
 | ตัวแปรหายหลัง build | Deploy command ต้องเป็น npm run deploy:github ไม่ใช้ default ที่อ่าน config คนละไฟล์ |
 | หน้าเว็บยังไม่ให้ล็อกอิน | ตั้ง runtime Text/Secret ให้ครบ กด Deploy และรีเฟรช production URL |
 | Google แจ้ง redirect_uri_mismatch | ตรวจ APP_URL กับ Google Authorized redirect URI ให้ตรง โดยต่อท้าย /auth/callback และไม่ใช้ localhost |

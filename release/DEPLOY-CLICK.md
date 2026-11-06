@@ -18,9 +18,9 @@
 1. เปิด [Cloudflare Dashboard](https://dash.cloudflare.com/) และเลือกบัญชีของคุณ
 2. เข้า **Workers & Pages**
 3. กด **Create application** แล้วเลือก **Create Worker / Hello World** ตามหน้าจอของบัญชี
-4. ตั้งชื่อ `line-chat-archive` ถ้าชื่อนี้มีอยู่แล้วและเป็นโปรเจกต์ของคุณ ให้เปิด Worker เดิมแทนการสร้างซ้ำ
+4. ตั้งชื่อ `botcollectdata` ถ้าชื่อนี้มีอยู่แล้วและเป็นโปรเจกต์ของคุณ ให้เปิด Worker เดิมแทนการสร้างซ้ำ
 5. กด **Deploy** สำหรับโค้ดตัวอย่างก่อน ยังไม่ต้องวางโปรแกรมในหน้าสร้างรอบแรก
-6. เปิดหน้า Overview ของ Worker จด URL จริง เช่น `https://line-chat-archive.your-subdomain.workers.dev`
+6. เปิดหน้า Overview ของ Worker จด URL จริง เช่น `https://botcollectdata.your-subdomain.workers.dev`
 
 หลังสร้างเสร็จจึงจะใช้ปุ่ม **Edit code** แก้โค้ดได้ ใช้ URL production ของ Worker ไม่ใช่ URL ของหน้าต่าง Preview
 
@@ -31,7 +31,7 @@
 1. จากเมนู Cloudflare ไปที่ **Storage & databases → D1 SQL Database**
 2. กด **Create database**
 3. ตั้งชื่อ `line-chat-archive-dashboard` แล้วกด **Create**
-4. กลับไป **Workers & Pages → line-chat-archive**
+4. กลับไป **Workers & Pages → botcollectdata**
 5. เข้าแท็บ **Bindings** หรือ **Settings → Bindings** ตามหน้าจอ
 6. กด **Add binding → D1 database**
 7. ช่อง Variable name ใส่ `DB` ตัวพิมพ์ใหญ่ตามนี้
@@ -49,7 +49,7 @@
 
 | Variable name | Value |
 | --- | --- |
-| APP_URL | URL จริงจากขั้นที่ 1 เช่น https://line-chat-archive.your-subdomain.workers.dev |
+| APP_URL | URL จริงจากขั้นที่ 1 เช่น https://botcollectdata.your-subdomain.workers.dev |
 | OWNER_EMAIL | อีเมล Google ที่จะเป็นเจ้าของชีตและใช้ล็อกอิน |
 | ARCHIVE_NAMESPACE | line-chat-archive-dashboard-production |
 | RETENTION_DAYS | 365 |
@@ -95,7 +95,7 @@ flag นี้ทำให้ Worker เรียก API ภายในที�
 1. ไป **Google Auth platform → Clients → Create client**
 2. เลือก **Web application**
 3. ตั้งชื่อ เช่น LINE Archive Cloudflare
-4. ใน **Authorized redirect URIs** เพิ่ม URL Worker จริงตามด้วย `/auth/callback` เช่น `https://line-chat-archive.your-subdomain.workers.dev/auth/callback`
+4. ใน **Authorized redirect URIs** เพิ่ม URL Worker จริงตามด้วย `/auth/callback` เช่น `https://botcollectdata.your-subdomain.workers.dev/auth/callback`
 5. กด **Create** แล้วเก็บ **Client ID** และ **Client secret** สำหรับขั้นที่ 7
 
 ไม่ใช้ API key หรือ service-account JSON แทนสองค่านี้ ไม่ต้องเพิ่มพอร์ต demo 8788 และไม่ต้องสร้าง Google Sheets เอง
@@ -185,7 +185,7 @@ Channel secret และ access token ต้องมาจาก channel เด
 
 ใน LINE Developers → Messaging API:
 
-1. ใน Webhook URL ใส่ URL Worker จริงตามด้วย `/webhooks/line` เช่น `https://line-chat-archive.your-subdomain.workers.dev/webhooks/line`
+1. ใน Webhook URL ใส่ URL Worker จริงตามด้วย `/webhooks/line` เช่น `https://botcollectdata.your-subdomain.workers.dev/webhooks/line`
 2. กด **Update → Verify** ต้องได้ **Success**
 3. เปิด **Use webhook**
 4. เปิด **Webhook redelivery** เมื่อมีตัวเลือก
