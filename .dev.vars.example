@@ -1,0 +1,10 @@
+# Copy to .dev.vars for local use. Never commit actual values.
+ARCHIVE_NAMESPACE=local-development
+LINE_CHANNEL_SECRET=
+LINE_CHANNEL_ACCESS_TOKEN=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+# Generate at least 32 random bytes, e.g. openssl rand -base64 32.
+SESSION_SECRET=
+# Generate a different 32-byte secret for encryption of Google refresh tokens.
+TOKEN_ENCRYPTION_SECRET=

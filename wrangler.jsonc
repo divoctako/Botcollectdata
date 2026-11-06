@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "line-chat-archive",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-05",
+  "compatibility_flags": ["global_fetch_strictly_public"],
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/auth/*", "/webhooks/*"]
+  },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "line-chat-archive",
+    "database_id": "00000000-0000-0000-0000-000000000000",
+    "migrations_dir": "migrations"
+  }],
+  "vars": {
+    "APP_URL": "http://localhost:8787",
+    "OWNER_EMAIL": "replace-with-your-email@gmail.com",
+    "ARCHIVE_NAMESPACE": "line-chat-archive-production",
+    "RETENTION_DAYS": "365",
+    "CACHE_DAYS": "7"
+  },
+  "triggers": { "crons": ["* * * * *"] },
+  "observability": { "enabled": true, "head_sampling_rate": 0.1 }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "line-chat-archive",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "dev": "wrangler dev",
+    "preview:demo": "node scripts/preview-demo.mjs",
+    "package:dashboard": "node scripts/package-dashboard.mjs",
+    "build:github": "npm run package:dashboard && npm test",
+    "deploy:github": "wrangler deploy --config wrangler.github.jsonc --keep-vars",
+    "test": "node --test --test-concurrency=1 tests/*.test.js",
+    "test:schema": "python -m unittest discover -s tests -v",
+    "check": "node --check src/worker.js && node --check public/app.js && npm test && npm run test:schema",
+    "db:local": "wrangler d1 migrations apply line-chat-archive --local",
+    "db:remote": "wrangler d1 migrations apply line-chat-archive --remote",
+    "deploy": "wrangler deploy",
+    "build": "wrangler deploy --dry-run --outdir dist"
+  },
+  "devDependencies": { "wrangler": "^4.0.0", "esbuild": "0.28.2" }
+}
