@@ -8,7 +8,18 @@
 
 ทางเลือกเดิม: [คัดลอกไฟล์รวมลง Dashboard](release/DEPLOY-CLICK.md) มี [หน้าสุ่ม secrets ในเครื่อง](release/generate-secrets.html) ให้ด้วย ชุดติดตั้งสร้างตาราง D1 บนฐานว่างให้เองเมื่อเปิดครั้งแรก ไม่ต้องรัน SQL
 
-พัฒนาโค้ดพร้อมรันในเครื่องและเตรียม deploy แล้ว ยังไม่ได้เชื่อมบัญชี LINE/Google หรือ deploy ขึ้น Cloudflare จริง ต้องตั้งค่าบัญชีและ secrets ตามด้านล่างก่อนเริ่มรับข้อมูลจริง
+Source code อยู่บน GitHub แล้ว คู่มือหลักอัปเดตวันที่ 6 พฤศจิกายน 2026 ใช้ GitHub → Cloudflare Workers Builds โดยตั้งค่าทั้งหมดผ่านหน้าเว็บ ตรวจ deployment จริงและการเชื่อม LINE/Google ตามขั้นตอนในคู่มือก่อนเริ่มรับข้อมูลจริง
+
+| ช่องใน Cloudflare Builds | ค่า |
+| --- | --- |
+| Worker name | line-chat-archive |
+| Production branch | main |
+| Root directory | ราก repository |
+| Build command | npm run build:github |
+| Deploy command | npm run deploy:github |
+| Build variable NODE_VERSION | 22 |
+
+ก่อนกด Deploy ต้องใส่ Database ID จริงใน wrangler.github.jsonc บน GitHub ส่วน APP_URL, OWNER_EMAIL และรหัสลับให้ตั้งเป็น runtime Variables/Secrets ใน Cloudflare ตาม [คู่มือหลัก](docs/deploy-github.md)
 
 **ข้อจำกัดที่ยังไม่ผ่านเป้าหมาย:** แบบ D1 ปัจจุบันมีการเขียนหลายแถวต่อข้อความ รวมการกันซ้ำ พิกัดแถว การยืนยันส่ง และการล้าง cache จึงคาดว่าจะเกิน D1 Free ที่ 100,000 แถวเขียน/วันเมื่อใช้งาน 10,000 ข้อความ/วันต่อเนื่อง แม้ Workers จะยังรับจำนวนคำขอได้ โปรแกรมไม่อัปเกรดแผนหรือคิดเงินอัตโนมัติ แต่เมื่อโควตาหมดอาจรับข้อความไม่ได้ ต้องปรับเส้นทางจัดเก็บเพื่อลดการเขียนหรือทบทวนเพดานปริมาณก่อนใช้งานตามเป้าเต็มรูปแบบ
 
@@ -60,7 +71,7 @@ $env:WRANGLER_SEND_METRICS = 'false'
 
 ## วิธีเดิมสำหรับผู้พัฒนาที่ใช้ Terminal
 
-วิธีที่ผู้ใช้เลือกปัจจุบันคือ [คลิกตั้งค่าผ่าน Dashboard](release/DEPLOY-CLICK.md) ส่วนวิธีเดิมด้านล่างเก็บไว้สำหรับงานพัฒนาเท่านั้น
+วิธีที่ผู้ใช้เลือกปัจจุบันคือ [เชื่อม GitHub กับ Cloudflare ผ่านหน้าเว็บ](docs/deploy-github.md) ส่วนวิธีเดิมด้านล่างเก็บไว้สำหรับงานพัฒนาเท่านั้น
 
 <details>
 <summary>แสดงวิธีเดิมผ่าน Wrangler / PowerShell</summary>

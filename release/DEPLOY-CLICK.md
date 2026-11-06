@@ -1,5 +1,7 @@
 # Deploy LINE Archive ด้วยการคลิก — ไม่ใช้ Terminal
 
+คู่มือนี้เป็นทางเลือกสำหรับคัดลอกไฟล์รวมลง Dashboard โดยตรง วิธีหลักล่าสุดที่ผู้ใช้เลือกคือ [เชื่อม GitHub กับ Cloudflare](../docs/deploy-github.md) ให้ใช้คู่มือนั้นถ้าจะให้ GitHub สั่ง build/deploy อัตโนมัติ และไม่ต้องทำขั้น Edit code หรือเพิ่ม Cron ซ้ำตามเอกสารนี้
+
 คู่มือนี้ใช้ Cloudflare Dashboard, Google Cloud Console และ LINE Developers คุณกดตั้งค่าและ Deploy เองได้ ไม่ต้องติดตั้ง Node.js ไม่ต้องรันคำสั่ง ไม่ต้องใช้ GitHub และไม่ต้องสร้างตาราง SQL เอง
 
 ## ไฟล์ที่ใช้
