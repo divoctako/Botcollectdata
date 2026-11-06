@@ -1,10 +1,33 @@
-# เชื่อม GitHub กับ Cloudflare โดยไม่เปิด Terminal
+# Deploy botcollectdata ผ่าน GitHub → Cloudflare โดยไม่เปิด Terminal
 
-อัปเดต: 6 พฤศจิกายน 2026 — วิธีติดตั้งหลักของโปรเจกต์นี้
+อัปเดต: 6 พฤศจิกายน 2026 — ใช้ Worker ชื่อ botcollectdata
 
 Repository: https://github.com/divoctako/Botcollectdata
 
 แนวทางนี้ให้ Cloudflare ดึงโค้ดจาก GitHub แล้ว build/deploy เอง คุณตั้งค่าผ่านหน้าเว็บ ไม่ต้องติดตั้ง Node.js หรือคัดลอก worker.js ลง Edit code หลังเชื่อมแล้ว การ commit ลง main จะสั่ง build ใหม่
+
+
+## สำหรับ Worker botcollectdata ที่สร้างไว้แล้ว
+
+1. เปิด Cloudflare → Workers & Pages → **botcollectdata**
+2. ตรวจ Settings → Builds ว่าเชื่อม **divoctako/Botcollectdata**, branch **main** และใช้ Build/Deploy command ตามขั้นที่ 2
+3. ตรวจ Database ID ใน wrangler.github.jsonc ให้ตรงกับฐาน D1 ที่คุณสร้าง ถ้าใส่ ID จริงไว้แล้วให้ข้ามการสร้างฐานใหม่
+4. เข้า Settings → Variables and Secrets ตั้ง Text variables ห้าค่าและ Secret หกค่าตามขั้นที่ 3–4
+5. เปิด production URL เพื่อเชื่อม Google แล้วตั้ง LINE webhook ตามขั้นที่ 5
+
+ชื่อ Worker ใช้ **botcollectdata** ส่วนชื่อฐาน D1 **line-chat-archive-dashboard** เป็นอีกทรัพยากรหนึ่ง คง D1 และข้อมูลเดิมไว้ได้โดยใช้ binding **DB**
+
+### URL สามจุดที่ต้องตรงกัน
+
+ตัวอย่างนี้ใช้ your-subdomain เป็นตำแหน่งให้แทนด้วย subdomain จริงจากปุ่ม Visit ของ Worker:
+
+| จุดที่ตั้งค่า | ตัวอย่าง |
+| --- | --- |
+| Cloudflare runtime APP_URL | https://botcollectdata.your-subdomain.workers.dev |
+| Google Authorized redirect URI | https://botcollectdata.your-subdomain.workers.dev/auth/callback |
+| LINE Webhook URL | https://botcollectdata.your-subdomain.workers.dev/webhooks/line |
+
+APP_URL เป็น URL ราก ไม่มี / ท้าย ส่วน Google กับ LINE ใช้ path ต่อท้ายตามตาราง หลังเปลี่ยนค่าให้ Save/Deploy ในบริการนั้น แล้วเปิด production URL ใหม่
 
 ## เริ่มจากตรงไหน
 
@@ -168,7 +191,7 @@ Database ID ไม่ใช่ access token ส่วนรหัส LINE/Google
 
 1. เปิด URL production → เข้าสู่ระบบด้วย Google ด้วยบัญชี OWNER_EMAIL และอนุญาตสิทธิ์ที่แอปขอ
 2. ตัวติดตั้งจะสร้าง schema อัตโนมัติบน D1 ว่างเมื่อเปิดครั้งแรก ไม่ต้องรัน SQL
-3. LINE Developers → Messaging API ตั้ง Webhook URL เป็น `https://<your-worker>/webhooks/line`
+3. LINE Developers → Messaging API ตั้ง Webhook URL เป็น URL จริงของ botcollectdata ตามด้วย `/webhooks/line` เช่น `https://botcollectdata.your-subdomain.workers.dev/webhooks/line`
 4. กด Verify ให้ได้ Success แล้วเปิด Use webhook และ Webhook redelivery เมื่อมีตัวเลือก
 5. เชิญบอตเข้ากลุ่มทดสอบหนึ่งกลุ่ม ส่งข้อความตัวอักษรใหม่ แล้วตรวจ dashboard และไฟล์ใน Google Drive
 
@@ -190,6 +213,13 @@ OAuth External ที่ยังอยู่สถานะ Testing พร้�
 การทดสอบด้วยแชทส่วนตัวหรือรูปภาพจะไม่เพิ่มแถว รุ่นนี้เก็บเฉพาะข้อความตัวอักษรในกลุ่ม ไม่ดึงประวัติก่อนบอตเข้ากลุ่ม
 
 Cloudflare → Worker → Settings → Triggers ควรมี Cron `* * * * *` จาก config ส่วน Observability/Logs ใช้ดูข้อผิดพลาด runtime การ deploy สำเร็จเพียงอย่างเดียวยังไม่ยืนยันว่า Google และ LINE เชื่อมครบ
+
+
+### เปิด Logs สำหรับตรวจการทำงาน
+
+เปิด **botcollectdata → Settings → Observability / Logs** คง Enabled เป็นเปิดและเลือก Include Invocation logs แล้วกด Deploy เพื่อบันทึก ค่าการสุ่มเก็บ log ใน config ปัจจุบันคือ 0.1 จึงอาจไม่เห็นทุกคำขอ ให้ตรวจ dashboard ของแอปและรายการค้างควบคู่กัน
+
+ในหน้า Builds/Deployments เลือก deployment ล่าสุด ตรวจชื่อ Worker และ commit ให้ตรง GitHub หาก build ไม่ผ่านให้เปิด build log ส่วนปัญหาตอนรับข้อความให้ดู runtime Logs และข้อความผิดพลาดบน frontend
 
 ## อัปเดตโปรแกรมภายหลัง
 

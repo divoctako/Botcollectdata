@@ -6,6 +6,9 @@
 
 **วิธีติดตั้งหลักที่ผู้ใช้เลือก:** [เชื่อม GitHub กับ Cloudflare ผ่านหน้าเว็บ](docs/deploy-github.md) จาก repository [divoctako/Botcollectdata](https://github.com/divoctako/Botcollectdata) ใช้ build อัตโนมัติและไม่ต้องเปิด Terminal ตั้งค่า D1, Google/LINE และ secrets ผ่าน Dashboard ตามคู่มือ
 
+
+**Worker ปัจจุบัน: botcollectdata** — ถ้าสร้าง Worker และใส่ D1 ID แล้ว ให้เริ่มจาก [ส่วนตั้งค่าระบบที่สร้างไว้แล้ว](docs/deploy-github.md#สำหรับ-worker-botcollectdata-ที่สร้างไว้แล้ว) ตรวจ Builds, runtime variables/secrets และ URL ของ Google/LINE ต่อได้เลย
+
 ทางเลือกเดิม: [คัดลอกไฟล์รวมลง Dashboard](release/DEPLOY-CLICK.md) มี [หน้าสุ่ม secrets ในเครื่อง](release/generate-secrets.html) ให้ด้วย ชุดติดตั้งสร้างตาราง D1 บนฐานว่างให้เองเมื่อเปิดครั้งแรก ไม่ต้องรัน SQL
 
 Source code อยู่บน GitHub แล้ว คู่มือหลักอัปเดตวันที่ 6 พฤศจิกายน 2026 ใช้ GitHub → Cloudflare Workers Builds โดยตั้งค่าทั้งหมดผ่านหน้าเว็บ ตรวจ deployment จริงและการเชื่อม LINE/Google ตามขั้นตอนในคู่มือก่อนเริ่มรับข้อมูลจริง
