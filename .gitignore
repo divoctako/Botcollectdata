@@ -1,0 +1,13 @@
+node_modules/
+.npm-cache/
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.env*
+!.env.example
+dist/
+__pycache__/
+*.pyc
+test-results/
+/line-archive-backup*.sql
