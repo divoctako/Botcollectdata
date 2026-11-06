@@ -8,7 +8,7 @@
   "d1_databases": [{
     "binding": "DB",
     "database_name": "line-chat-archive-dashboard",
-    "database_id": "00000000-0000-0000-0000-000000000000"
+    "database_id": "db95a750-a7b2-4a51-a677-d006504ca022"
   }],
   // Runtime Text variables and Secrets are entered in Cloudflare Dashboard.
   // The deploy:github script uses --keep-vars to preserve them on every deploy.
